@@ -30,92 +30,76 @@ public:
         }
 
         for (int i = 1; i < s.size(); ++i) {
-            std::string evenPalindrome = findEvenPalindrome(s, i);
-            if (evenPalindrome.size() > ret.size()) {
-                ret = evenPalindrome;
-            }
-
-            std::string oddPalindrome = findOddPalindrome(s, i);
-            if (oddPalindrome.size() > ret.size()) {
-                ret = oddPalindrome;
+            std::string palindrome = findPalindrome(s, i);
+            if (palindrome.size() > ret.size()) {
+                ret = palindrome;
             }
         }
 
-        return ret;
+        if (ret.empty() && !s.empty()) {
+            return s.substr(0, 1);
+        } else {
+            return ret;
+        }
     }
 
 private:
-    /**
-     * search for palindrome having even number of chars
-     * search backward from index
-     */ 
-    std::string findEvenPalindrome(const std::string& s, int i)
+    std::string findPalindrome(const std::string& s, int i) 
     {
-        std::cout << "findEvenPalindrome at " << i << std::endl;
+        std::cout << "\nfindPalindrome at " << i << std::endl;
         std::string ret;
         int palindromeStart = -1;
         int palindromeEnd = -1;
+        bool foundEvenPalindrome = true;
+        bool foundOddPalindrome = true;
 
-        int x = i - 1;
+        int x = i;
         int y = i;
-        if (x < 0) {
+        if (x < 0)
+        {
             return ret;
         }
 
-        while (x >= 0 && y < s.size()) {
+        while (x >= 1 && y <= s.size()-1)
+        {
+            // check even palindrome
+            --x;
             std::cout << s[x] << " <> " << s[y] << std::endl;
-            if (s[x] != s[y]) {
-                std::cout << "stop at" << x << " " << y << std::endl;
-                break;
+            if (s[x] != s[y])
+            {
+                foundEvenPalindrome = false;
+                std::cout << "stop finding even palindrome at " << x << " " << y << std::endl;
             }
 
-            palindromeStart = x;
-            palindromeEnd = y;
-            --x;
-            ++y; 
-        }
-
-        if (palindromeStart != -1 && palindromeEnd != -1) {
-            ret = s.substr(palindromeStart, palindromeEnd-palindromeStart+1);
-            std::cout << ret << std::endl;
-        }
-
-        return ret;
-    } 
-    
-    /** 
-     * search for palindrome having odd number of chars
-     */ 
-    std::string findOddPalindrome(const std::string& s, int i)
-    {
-        std::cout << "findOddPalindrome at " << i << std::endl;
-        std::string ret;
-        int palindromeStart = -1;
-        int palindromeEnd = -1;
-
-        int x = i - 1;
-        int y = i + 1;
-        if (x < 0 || y >= s.size()) {
-            return ret;
-        }
-
-        while (x >= 0 && y < s.size()) {
-            std::cout << s[x] << " <> " << s[y] << std::endl;
-            if (s[x] != s[y]) {
-                std::cout << "stop at " <<  x << " " << y << std::endl;
-                break;
+            if (foundEvenPalindrome) {
+                palindromeStart = x;
+                palindromeEnd = y;
             }
-
-            palindromeStart = x;
-            palindromeEnd = y;
-            --x;
+            
+            // check odd palidrome
             ++y;
+            std::cout << s[x] << " <> " << s[y] << std::endl;
+            if (s[x] != s[y])
+            {
+                foundOddPalindrome = false;
+                std::cout << "stop finding odd palindrome at " << x << " " << y << std::endl;   
+            }
+
+            if (foundOddPalindrome) {
+                palindromeStart = x;
+                palindromeEnd = y;
+            }
+
+            if (!foundOddPalindrome && !foundEvenPalindrome) {
+                std::cout << "stop finding palindrome at " << x << " " << y << std::endl;
+                break;
+            }   
         }
 
         if (palindromeStart != -1 && palindromeEnd != -1)
         {
             ret = s.substr(palindromeStart, palindromeEnd - palindromeStart + 1);
-            std::cout << ret << std::endl;
+            std::cout << "found palindrome " << ret << " at " << i << " in " << s << std::endl << std::endl;
         }
 
         return ret;
@@ -123,9 +107,9 @@ private:
 };
 
 int main() {
-    const std::string input = "ababd";
+    const std::string input = "bb";
     Solution solution;
     const std::string result = solution.longestPalindrome(input);
-    std::cout << result << std::endl;
+    std::cout << "\nresult: " << result << std::endl;
     return 0;
 }

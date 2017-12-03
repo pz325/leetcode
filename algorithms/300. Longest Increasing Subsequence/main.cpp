@@ -40,12 +40,14 @@ class Solution
             {
                 *index = nums[i];
             }
+
             std::cout << nums[i] << std::endl;
             std::cout << "lengths:" << std::endl;
             for (auto l : lengths)
             {
                 std::cout << l << " ";
             }
+            
             std::cout << std::endl;
         }
 
